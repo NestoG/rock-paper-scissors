@@ -3,21 +3,24 @@
 let computerOptions = ["Rock", "Paper", "Scissors"];
 let playerScore = 0;
 let computerScore = 0;
+const container = document.querySelector(".container");
 
-// Run the game five times
-for (let i = 0; i < 5; i++){
-    game();
-}
 
-// Announce score
-console.log("Player score: " + playerScore + " | Computer score: " + computerScore);
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        game(button.id);
+        const content = document.createElement('p');
+        content.textContent = "**************************************";
+        container.appendChild(content);
+    })
+})
 
 
 // Main game function
-function game() {
-    let playerChoice = prompt("What do you want to pick? 'Rock', 'Paper', or 'Scissors'?");
-    let computerChoice = getComputerChoice(computerOptions);
+function game(playerChoice) {
 
+    let computerChoice = getComputerChoice(computerOptions);
     console.log("Players choice is: " + playerChoice);
     console.log("Computers choice is: " + computerChoice);
     let result = playRound(playerChoice, computerChoice);
@@ -26,7 +29,20 @@ function game() {
         playerScore = playerScore + 1;
     } else if (result == "You LOSE!!" ) {
         computerScore = computerScore + 1;
-    } 
+    }
+    const content = document.createElement('p');
+    content.classList.add('result');
+    content.textContent = result + " The score is Player: " + playerScore + " | Computer: " + computerScore;
+    container.appendChild(content);
+    if(playerScore == 5 || computerScore == 5) {
+        const content = document.createElement('p');
+        content.textContent = "GAME OVER!!! The score is Player: " + playerScore + " | Computer: " + computerScore;
+        container.appendChild(content);
+        for(button of buttons){
+            button.style.display='none';
+        }
+
+    }
 }
 
 // Get a random item from a provided array
@@ -38,6 +54,10 @@ function getComputerChoice(arrayInput) {
 
 // Compare player and computer choices, return a string
 function playRound(playerChoice, computerChoice) {
+    const content = document.createElement('p');
+    content.textContent = "Players choice: " + playerChoice + " | Computer choice: " + computerChoice;
+    container.appendChild(content);
+
     if (playerChoice == computerChoice) {
         return "It's a tie!!";
     }
